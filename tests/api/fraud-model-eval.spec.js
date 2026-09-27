@@ -38,6 +38,10 @@ for (const dataset of datasets) {
       description: `precision=${metrics.precision} recall=${metrics.recall} falseBlockRate=${metrics.falseBlockRate}`,
     });
 
+    // Freshly generated data is exploratory: report its metrics, but only the curated,
+    // human-reviewed dataset can fail the build.
+    if (!dataset.required) return;
+
     // Soft assertions: report every metric that misses the bar, not just the first.
     expect.soft(metrics.precision, 'precision').toBeGreaterThanOrEqual(QUALITY_BAR.minPrecision);
     expect.soft(metrics.recall, 'recall').toBeGreaterThanOrEqual(QUALITY_BAR.minRecall);

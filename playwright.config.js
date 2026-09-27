@@ -18,6 +18,7 @@ export default defineConfig({
     ['list'],
     ['html', { open: 'never' }],
     ['junit', { outputFile: 'test-results/junit.xml' }],
+    ['./ai/failure-analyzer-reporter.js'],
   ],
   use: {
     baseURL: BASE_URL,
@@ -28,6 +29,11 @@ export default defineConfig({
     timezoneId: 'Europe/Berlin',
   },
   projects: [
+    {
+      // Fast checks of pure helpers (IBAN, metrics, redaction): no browser, no server calls.
+      name: 'unit',
+      testDir: './tests/unit',
+    },
     {
       name: 'api',
       testDir: './tests/api',
