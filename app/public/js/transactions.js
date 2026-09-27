@@ -70,7 +70,11 @@ rows.addEventListener('click', (e) => {
 });
 rows.addEventListener('keydown', (e) => {
   const row = e.target.closest('tr[data-id]');
-  if (row && e.key === 'Enter') openDetails(row.dataset.id);
+  if (row && e.key === 'Enter') {
+    // Without this, the same Enter press activates the dialog's focused Close button and shuts it immediately.
+    e.preventDefault();
+    openDetails(row.dataset.id);
+  }
 });
 document.getElementById('close-details').addEventListener('click', () => dialog.close());
 
