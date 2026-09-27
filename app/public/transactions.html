@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Transactions · NovaPay</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="app-header" id="app-header"></header>
+  <main>
+    <h1>Transactions</h1>
+    <section class="card">
+      <div class="filters">
+        <div class="field">
+          <label for="status-filter">Status</label>
+          <select id="status-filter">
+            <option value="ALL">All</option>
+            <option value="COMPLETED">Completed</option>
+            <option value="BLOCKED">Blocked</option>
+            <option value="CANCELLED">Cancelled</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="search">Search</label>
+          <input id="search" type="search" placeholder="Name or reference">
+        </div>
+        <button class="secondary" id="export-button" data-testid="export-csv">Export CSV</button>
+      </div>
+      <p class="muted" id="result-count" data-testid="result-count" aria-live="polite"></p>
+      <div class="table-wrap">
+        <table data-testid="transactions-table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Counterparty</th>
+              <th scope="col">Reference</th>
+              <th scope="col">Status</th>
+              <th scope="col" class="amount" aria-sort="none" id="amount-header">
+                <button class="th-button" id="sort-amount" data-testid="sort-amount">Amount</button>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <p id="empty-state" data-testid="empty-state" hidden>No transactions match your filters.</p>
+    </section>
+  </main>
+
+  <dialog id="details-dialog" data-testid="tx-details" aria-labelledby="details-title">
+    <h2 id="details-title">Transaction details</h2>
+    <dl class="summary" id="details-body"></dl>
+    <button class="secondary" id="close-details">Close</button>
+  </dialog>
+
+  <script type="module" src="/js/transactions.js"></script>
+</body>
+</html>

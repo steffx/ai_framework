@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Send money · NovaPay</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="app-header" id="app-header"></header>
+  <main>
+    <h1>Send money</h1>
+    <ol class="steps" aria-label="Progress">
+      <li data-step="details" aria-current="step">1. Details</li>
+      <li data-step="review">2. Review</li>
+      <li data-step="result">3. Done</li>
+    </ol>
+
+    <div id="form-error" class="banner error" role="alert" data-testid="transfer-error" hidden></div>
+
+    <!-- Step 1: details -->
+    <section class="card" id="step-details" data-testid="step-details">
+      <form id="transfer-form" novalidate>
+        <div class="field">
+          <label for="fromAccount">Pay from</label>
+          <select id="fromAccount" name="fromAccountId"></select>
+          <span class="field-error" data-error-for="fromAccountId"></span>
+        </div>
+        <div class="field">
+          <label for="recipientName">Recipient name</label>
+          <input id="recipientName" name="recipientName" autocomplete="off">
+          <span class="field-error" data-error-for="recipientName" data-testid="error-recipientName"></span>
+        </div>
+        <div class="field">
+          <label for="recipientIban">Recipient IBAN</label>
+          <input id="recipientIban" name="recipientIban" autocomplete="off" spellcheck="false" placeholder="e.g. DE89 3704 0044 0532 0130 00">
+          <span class="field-error" data-error-for="recipientIban" data-testid="error-recipientIban"></span>
+        </div>
+        <div class="field">
+          <label for="amount">Amount (EUR)</label>
+          <input id="amount" name="amount" inputmode="decimal" autocomplete="off">
+          <span class="field-error" data-error-for="amount" data-testid="error-amount"></span>
+        </div>
+        <div class="field">
+          <label for="description">Payment reference <span class="hint">(optional)</span></label>
+          <input id="description" name="description" maxlength="140">
+          <span class="hint" id="description-counter" data-testid="description-counter">0/140</span>
+          <span class="field-error" data-error-for="description"></span>
+        </div>
+        <button type="submit">Continue</button>
+      </form>
+    </section>
+
+    <!-- Step 2: review -->
+    <section class="card" id="step-review" data-testid="step-review" hidden>
+      <h2>Check the payment details</h2>
+      <dl class="summary" id="review-summary" data-testid="review-summary"></dl>
+      <p class="banner warning">Scammers may pretend to be your bank or the police. NovaPay will never ask you to move money to a "safe account".</p>
+      <div class="actions">
+        <button id="confirm-button" data-testid="confirm-transfer">Confirm and send</button>
+        <button class="secondary" id="edit-button" data-testid="edit-transfer">Edit details</button>
+      </div>
+    </section>
+
+    <!-- Step 3a: one-time code -->
+    <section class="card" id="step-otp" data-testid="otp-panel" hidden>
+      <h2>Confirm it's you</h2>
+      <p>This payment needs extra verification. We sent a 6-digit code to your phone ending in ••42.</p>
+      <form id="otp-form" novalidate>
+        <div class="field">
+          <label for="otp">Security code</label>
+          <input id="otp" name="otp" class="otp-input" inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+          <span class="field-error" id="otp-error" data-testid="otp-error" role="alert"></span>
+        </div>
+        <div class="actions">
+          <button type="submit" data-testid="verify-otp">Verify and send</button>
+          <a class="button secondary" href="/dashboard">Cancel</a>
+        </div>
+      </form>
+    </section>
+
+    <!-- Step 3b: result -->
+    <section class="card" id="step-result" hidden>
+      <div id="result-success" data-testid="transfer-success" hidden>
+        <h2>Payment sent</h2>
+        <p id="success-message"></p>
+        <p>New balance: <strong id="new-balance" data-testid="new-balance"></strong></p>
+      </div>
+      <div id="result-blocked" data-testid="transfer-blocked" hidden>
+        <h2>Payment blocked for your protection</h2>
+        <p>This payment looked unusual, so we stopped it. No money has left your account.</p>
+        <p class="muted">Why we blocked it:</p>
+        <ul id="blocked-reasons"></ul>
+        <p><a href="/card">Review this in Card &amp; security</a></p>
+      </div>
+      <div id="result-cancelled" data-testid="transfer-cancelled" hidden>
+        <h2>Payment cancelled</h2>
+        <p id="cancelled-message"></p>
+      </div>
+      <div class="actions">
+        <a class="button" href="/transfer" data-testid="new-transfer">Make another payment</a>
+        <a class="button secondary" href="/dashboard">Back to dashboard</a>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="/js/transfer.js"></script>
+</body>
+</html>

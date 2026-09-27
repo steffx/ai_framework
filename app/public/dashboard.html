@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard · NovaPay</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="app-header" id="app-header"></header>
+  <main class="stack">
+    <h1 id="greeting" data-testid="greeting">Loading…</h1>
+    <div id="alert-banner" class="banner error" role="alert" data-testid="fraud-alert-banner" hidden></div>
+    <section aria-labelledby="accounts-heading">
+      <h2 id="accounts-heading">Your accounts</h2>
+      <div class="grid" id="accounts"></div>
+    </section>
+    <div class="grid">
+      <section class="card" aria-labelledby="card-heading" data-testid="card-summary">
+        <h2 id="card-heading">Debit card</h2>
+        <p id="card-number" data-testid="card-number"></p>
+        <p id="card-status"></p>
+        <a href="/card">Manage card</a>
+      </section>
+      <section class="card" aria-labelledby="actions-heading">
+        <h2 id="actions-heading">Quick actions</h2>
+        <div class="actions">
+          <a class="button" href="/transfer" data-testid="send-money">Send money</a>
+          <a class="button secondary" href="/transactions">View all transactions</a>
+        </div>
+      </section>
+    </div>
+    <section class="card" aria-labelledby="recent-heading">
+      <h2 id="recent-heading">Recent activity</h2>
+      <ul class="plain" id="recent" data-testid="recent-transactions"></ul>
+    </section>
+  </main>
+  <script type="module" src="/js/dashboard.js"></script>
+</body>
+</html>

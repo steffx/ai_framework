@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Card &amp; security · NovaPay</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="app-header" id="app-header"></header>
+  <main class="stack">
+    <h1>Card &amp; security</h1>
+    <div class="grid">
+      <section class="card stack" aria-labelledby="card-heading">
+        <h2 id="card-heading">Debit card</h2>
+        <div class="payment-card" id="payment-card" data-testid="payment-card">
+          <span>NovaPay Debit</span>
+          <span class="number" id="card-number" data-testid="card-number"></span>
+          <span id="card-holder"></span>
+        </div>
+        <div class="switch">
+          <button role="switch" aria-checked="false" id="freeze-toggle" data-testid="freeze-toggle" aria-labelledby="freeze-label"></button>
+          <span id="freeze-label">Freeze card and outgoing payments</span>
+        </div>
+        <p id="freeze-status" data-testid="freeze-status" aria-live="polite"></p>
+      </section>
+      <section class="card" aria-labelledby="alerts-heading">
+        <h2 id="alerts-heading">Security alerts</h2>
+        <ul class="plain" id="alerts" data-testid="alerts-list"></ul>
+      </section>
+    </div>
+  </main>
+
+  <dialog id="report-dialog" data-testid="report-dialog" aria-labelledby="report-title">
+    <h2 id="report-title">Report this payment as fraud?</h2>
+    <p>We will freeze your card and outgoing payments straight away and a fraud specialist will contact you.</p>
+    <div class="actions">
+      <button class="danger" id="confirm-report" data-testid="confirm-report">Yes, report fraud</button>
+      <button class="secondary" id="cancel-report">Cancel</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="/js/card.js"></script>
+</body>
+</html>

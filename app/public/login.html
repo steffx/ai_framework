@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in · NovaPay</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="login-wrap">
+    <div class="card">
+      <p class="brand">Nova<span>Pay</span></p>
+      <h1>Sign in to online banking</h1>
+      <div id="notice" class="banner info" role="status" data-testid="login-notice" hidden></div>
+      <div id="error" class="banner error" role="alert" data-testid="login-error" hidden></div>
+      <form id="login-form" novalidate>
+        <div class="field">
+          <label for="username">Username</label>
+          <input id="username" name="username" autocomplete="username" aria-describedby="username-error">
+          <span class="field-error" id="username-error" data-testid="username-error"></span>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" aria-describedby="password-error">
+          <span class="field-error" id="password-error" data-testid="password-error"></span>
+          <label class="hint"><input type="checkbox" id="show-password"> Show password</label>
+        </div>
+        <button type="submit" id="login-button">Sign in</button>
+      </form>
+      <p class="hint">Demo account: <code>demo</code> / <code>Demo123!</code>. This is a fictional bank for test automation practice.</p>
+    </div>
+  </main>
+  <script type="module" src="/js/login.js"></script>
+</body>
+</html>

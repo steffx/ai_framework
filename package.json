@@ -1,0 +1,35 @@
+{
+  "name": "ai-framework",
+  "version": "1.0.0",
+  "description": "AI-assisted Playwright test automation framework for a fintech payments and fraud-detection web app",
+  "type": "module",
+  "scripts": {
+    "start": "node app/server.js",
+    "test": "playwright test",
+    "test:ui": "playwright test --project=desktop-chromium --project=mobile-chromium",
+    "test:api": "playwright test --project=api",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:headed": "playwright test --project=desktop-chromium --headed",
+    "report": "playwright show-report",
+    "ai:generate": "node ai/generate-scenarios.js"
+  },
+  "keywords": [
+    "playwright",
+    "test-automation",
+    "fraud-detection",
+    "fintech",
+    "qa",
+    "ai-testing"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.55.0"
+  }
+}
