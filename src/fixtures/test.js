@@ -36,6 +36,24 @@ export const test = base.extend({
     await use(new BankApi(page.request));
   },
 
+  /**
+   * Factory for API-only tests: each call creates a new customer with its own
+   * cookie jar and returns a logged-in BankApi. Useful for multi-customer tests.
+   */
+  newCustomerSession: async ({ playwright, baseURL }, use) => {
+    const contexts = [];
+    await use(async (account = {}) => {
+      const context = await playwright.request.newContext({ baseURL });
+      contexts.push(context);
+      const api = new BankApi(context);
+      api.credentials = await api.createCustomer(account);
+      const response = await api.login(api.credentials);
+      expect(response.ok(), 'API login for new customer').toBeTruthy();
+      return api;
+    });
+    await Promise.all(contexts.map((c) => c.dispose()));
+  },
+
   loginPage: async ({ page }, use) => use(new LoginPage(page)),
   dashboardPage: async ({ page }, use) => use(new DashboardPage(page)),
   transferPage: async ({ page }, use) => use(new TransferPage(page)),
