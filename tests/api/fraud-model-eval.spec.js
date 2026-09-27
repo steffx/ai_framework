@@ -33,6 +33,8 @@ for (const dataset of datasets) {
     const metrics = computeMetrics(predictions);
     await testInfo.attach('metrics.json', { body: JSON.stringify({ metrics, predictions }, null, 2), contentType: 'application/json' });
     await testInfo.attach('metrics.md', { body: metricsToMarkdown(metrics), contentType: 'text/markdown' });
+    fs.mkdirSync('reports', { recursive: true });
+    fs.writeFileSync(`reports/fraud-model-${dataset.name}.md`, `### Fraud model: ${dataset.name} dataset\n\n${metricsToMarkdown(metrics)}\n`);
     testInfo.annotations.push({
       type: 'metrics',
       description: `precision=${metrics.precision} recall=${metrics.recall} falseBlockRate=${metrics.falseBlockRate}`,

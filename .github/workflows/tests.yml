@@ -1,0 +1,80 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 5 * * 1-5' # nightly regression on weekdays
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Optional: add ANTHROPIC_API_KEY (or OPENAI_API_KEY) as a repository secret to switch the
+  # failure analysis from rule-based heuristics to AI. Tests never depend on it.
+  ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
+jobs:
+  api:
+    name: Unit, API and model evaluation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run unit and API tests
+        run: npx playwright test --project=unit --project=api
+      - name: Publish fraud model metrics
+        if: always()
+        run: |
+          if ls reports/*.md >/dev/null 2>&1; then cat reports/*.md >> "$GITHUB_STEP_SUMMARY"; fi
+          if [ -f ai-failure-report.md ]; then cat ai-failure-report.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: api-report
+          path: |
+            playwright-report/
+            test-results/junit.xml
+            ai-failure-report.md
+          retention-days: 14
+
+  ui:
+    name: UI (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [desktop-chromium, mobile-chromium]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run UI tests
+        run: npx playwright test --project=${{ matrix.project }}
+      - name: Publish AI failure analysis
+        if: failure()
+        run: if [ -f ai-failure-report.md ]; then cat ai-failure-report.md >> "$GITHUB_STEP_SUMMARY"; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-report-${{ matrix.project }}
+          path: |
+            playwright-report/
+            test-results/
+            ai-failure-report.md
+          retention-days: 14
