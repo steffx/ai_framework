@@ -49,7 +49,13 @@ test.describe('Step-up verification (one-time code)', () => {
     const transferId = await transferPage.sendAndCaptureTransferId({ ...RISKY_PAYMENT, recipientIban: newIban('DE') });
     const wrong = wrongCode(await bankApi.otpFor(transferId));
 
-    for (let i = 0; i < 3; i++) await transferPage.enterOtp(wrong);
+    // Wait for the feedback of each attempt before typing the next code, like a real user.
+    // Firing all three submits at once made this test flaky: a late response cleared the next code.
+    for (const attemptsLeft of ['2 attempts left', '1 attempt left']) {
+      await transferPage.enterOtp(wrong);
+      await expect(transferPage.otpError).toContainText(attemptsLeft);
+    }
+    await transferPage.enterOtp(wrong);
 
     await expect(transferPage.cancelled).toBeVisible();
     await expect(transferPage.cancelled).toContainText('Too many incorrect codes. The payment was cancelled.');

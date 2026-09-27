@@ -50,7 +50,10 @@ test.describe('Authentication', () => {
     await loginPage.login(customer.username, 'wrong-password');
     await expect(loginPage.error).toHaveText('Account locked after too many failed attempts. Contact support.');
 
+    // The lock message is already on screen, so wait for the server's answer instead of the text.
+    const response = page.waitForResponse('**/api/login');
     await loginPage.login(customer.username, customer.password);
+    expect((await response).status()).toBe(423);
     await expect(loginPage.error).toContainText('Account locked');
     await expect(page).toHaveURL(/\/login/);
   });
